@@ -12,11 +12,19 @@ import './styles/index.scss'
 import 'normalize.css/normalize.css'
 import 'element-ui/lib/theme-chalk/index.css'
 
+import * as components from '@/components'
+
 Vue.config.productionTip = false
 
 Object.keys(filters).forEach((key) => {
   Vue.filter(key, filters[key])
 })
+
+if (typeof window !== 'undefined' && window.Vue) {
+  Object.keys(components).forEach((name) => {
+    window.Vue.component(name, components[name])
+  })
+}
 
 Vue.use(ElementUI)
 
