@@ -22,41 +22,40 @@
 </template>
 
 <script>
-//  import uploadMixin from './upload-mixin.js'
 
-  export default {
-    name: 'HyMultiUpload',
-    data: () => ({
-      fileList: [],
-      dialogVisible: false,
-      dialogImageUrl: ''
-    }),
-    methods: {
-      emitInput (fileList) {
-        this.$emit('input', fileList.map(img => img.qiniuKey))
-      },
-      handleRemove (file, fileList) {
-        this.emitInput(fileList)
-      },
-      handleImageSuccess (resp, file, fileList) {
-        file.url = `${this.qiniuHost}${resp.key}`
-        file.qiniuKey = resp.key
-        this.emitInput(fileList)
-      },
-      handlePreview (file) {
-        this.dialogImageUrl = file.url
-        this.dialogVisible = true
-      }
+export default {
+  name: 'HyMultiUpload',
+  data: () => ({
+    fileList: [],
+    dialogVisible: false,
+    dialogImageUrl: ''
+  }),
+  methods: {
+    emitInput (fileList) {
+      this.$emit('input', fileList.map(img => img.qiniuKey))
     },
-    mounted () {
-      return this.getQiniuToken().then(() => {
-        if (this.value) {
-          this.fileList = this.transformValue(this.value)
-          this.emitInput(this.fileList)
-        }
-      })
+    handleRemove (file, fileList) {
+      this.emitInput(fileList)
+    },
+    handleImageSuccess (resp, file, fileList) {
+      file.url = `${this.qiniuHost}${resp.key}`
+      file.qiniuKey = resp.key
+      this.emitInput(fileList)
+    },
+    handlePreview (file) {
+      this.dialogImageUrl = file.url
+      this.dialogVisible = true
     }
+  },
+  mounted () {
+    return this.getQiniuToken().then(() => {
+      if (this.value) {
+        this.fileList = this.transformValue(this.value)
+        this.emitInput(this.fileList)
+      }
+    })
   }
+}
 </script>
 
 <style lang="scss">

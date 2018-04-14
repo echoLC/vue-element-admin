@@ -14,29 +14,28 @@
 </template>
 
 <script>
-//  import uploadMixin from './upload-mixin.js'
 
-  export default {
-    name: 'HySingleUpload',
-    data: () => ({
-      imageUrl: ''
-    }),
-    methods: {
-      emitInput (val) {
-        this.$emit('input', val)
-      },
-      handleImageSuccess (resp) {
-        this.imageUrl = `${this.qiniuHost}${resp.key}`
-        this.emitInput(resp.key)
-      }
+export default {
+  name: 'HySingleUpload',
+  data: () => ({
+    imageUrl: ''
+  }),
+  methods: {
+    emitInput (val) {
+      this.$emit('input', val)
     },
-    mounted () {
-      return this.getQiniuToken().then(() => {
-        this.imageUrl = this.transformValue(this.value)
-        this.emitInput(this.value)
-      })
+    handleImageSuccess (resp) {
+      this.imageUrl = `${this.qiniuHost}${resp.key}`
+      this.emitInput(resp.key)
     }
+  },
+  mounted () {
+    return this.getQiniuToken().then(() => {
+      this.imageUrl = this.transformValue(this.value)
+      this.emitInput(this.value)
+    })
   }
+}
 </script>
 
 <style lang="scss">

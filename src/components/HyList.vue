@@ -16,36 +16,36 @@
 </template>
 
 <script>
-  export default {
-    name: 'HyList',
-    props: {
-      loading: {
-        type: Boolean,
-        default: false
-      },
-      loadingText: {
-        type: String,
-        default: '数据加载中'
-      },
-      list: {
-        type: Array,
-        default: () => []
-      },
-      pageInfo: {
-        type: Object,
-        default: () => ({
-          total: 0,
-          pageSize: 0,
-          currentPage: 1
-        })
-      }
+export default {
+  name: 'HyList',
+  props: {
+    loading: {
+      type: Boolean,
+      default: false
     },
-    methods: {
-      handleCurrentChange (val) {
-        this.$emit('current-change', val)
-      }
+    loadingText: {
+      type: String,
+      default: '数据加载中'
+    },
+    list: {
+      type: Array,
+      default: () => []
+    },
+    pageInfo: {
+      type: Object,
+      default: () => ({
+        total: 0,
+        pageSize: 0,
+        currentPage: 1
+      })
+    }
+  },
+  methods: {
+    handleCurrentChange (val) {
+      this.$emit('current-change', val)
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>

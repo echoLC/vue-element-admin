@@ -20,8 +20,6 @@ import TabViews from './TabViews'
 import Levelbar from './Levelbar'
 import ErrorLog from '@/components/ErrLog'
 
-//import { getUser } from '@/lib/auth'
-
 export default {
   name: 'Navbar',
   components: {
@@ -34,9 +32,6 @@ export default {
     ...mapState({
       errLog: ({ errLog }) => errLog.errLog
     })
-//    admin () {
-//      return getUser()
-//    }
   },
   methods: {
     ...mapMutations(['logout'])

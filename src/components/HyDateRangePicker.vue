@@ -28,7 +28,9 @@ export default {
   props: {
     value: {
       type: Object,
-      default: ''
+      default: () => {
+        return ''
+      }
     },
     quickOption: {
       type: Boolean,
