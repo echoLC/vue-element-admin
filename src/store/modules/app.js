@@ -1,35 +1,32 @@
+import Cookies from 'js-cookie'
+
 const app = {
   state: {
-    visitedViews: [],
-    matchRoutes: []
+    sidebar: {
+      opened: !+Cookies.get('sidebarStatus')
+    },
+    language: Cookies.get('language') || 'en'
   },
   mutations: {
-    ADD_VISITED_VIEWS: (state, view) => {
-      if (state.visitedViews.some(v => v.name === view.name)) {
-        return
+    TOGGLE_SIDEBAR: state => {
+      if (state.sidebar.opened) {
+        Cookies.set('sidebarStatus', 1)
+      } else {
+        Cookies.set('sidebarStatus', 0)
       }
-      state.visitedViews.push(view)
+      state.sidebar.opened = !state.sidebar.opened
     },
-    DEL_VISITED_VIEWS: (state, view) => {
-      let index
-      for (const [i, v] of state.visitedViews.entries()) {
-        if (v.path === view.path) {
-          index = i
-          break
-        }
-      }
-      state.visitedViews.splice(index, 1)
+    SET_LANGUAGE: (state, language) => {
+      state.language = language
+      Cookies.set('language', language)
     }
   },
   actions: {
-    addVisitedViews ({ commit }, view) {
-      commit('ADD_VISITED_VIEWS', view)
+    toggleSideBar({ commit }) {
+      commit('TOGGLE_SIDEBAR')
     },
-    delVisitedViews ({ commit, state }, view) {
-      return new Promise((resolve) => {
-        commit('DEL_VISITED_VIEWS', view)
-        resolve([...state.visitedViews])
-      })
+    setLanguage({ commit }, language) {
+      commit('SET_LANGUAGE', language)
     }
   }
 }

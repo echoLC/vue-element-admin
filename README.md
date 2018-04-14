@@ -1,27 +1,26 @@
-# vue-element-admin
+# vue-elemnt-admin 
 
-> A Vue.js project
+## 开发
+```bash
+# 克隆项目
+git clone https://github.com/PanJiaChen/vue-element-admin.git
 
-## Build Setup
-
-``` bash
-# install dependencies
+# 安装依赖
 npm install
+   
+# 建议不要用cnpm安装 会有各种诡异的bug 可以通过如下操作解决 npm 下载速度慢的问题
+npm install --registry=https://registry.npm.taobao.org
 
-# serve with hot reload at localhost:8080
+# 启动服务
 npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-
-# run unit tests
-npm run unit
-
-# run all tests
-npm test
 ```
+浏览器访问 http://localhost:9527
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## 发布
+```bash
+# 构建测试环境
+npm run build:sit
+
+# 构建生成环境
+npm run build:prod
+```

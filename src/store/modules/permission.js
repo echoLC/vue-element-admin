@@ -1,19 +1,24 @@
-const DEFAULT_SUPER_ADMIN_ROLE = 0
+import { asyncRouterMap, constantRouterMap } from '@/router'
 
 /**
- * Check permission of a route
- * @param {Array} roles
- * @param {Array} route
- * @return {Boolean} hasPermission
+ * 通过meta.role判断是否与当前用户权限匹配
+ * @param roles
+ * @param route
  */
-function hasPermission (roles, route) {
+function hasPermission(roles, route) {
   if (route.meta && route.meta.roles) {
     return roles.some(role => route.meta.roles.indexOf(role) >= 0)
+  } else {
+    return true
   }
-  return true
 }
 
-function filterAsyncRouter (asyncRouterMap, roles) {
+/**
+ * 递归过滤异步路由表，返回符合用户角色权限的路由表
+ * @param asyncRouterMap
+ * @param roles
+ */
+function filterAsyncRouter(asyncRouterMap, roles) {
   const accessedRouters = asyncRouterMap.filter(route => {
     if (hasPermission(roles, route)) {
       if (route.children && route.children.length) {
@@ -26,86 +31,32 @@ function filterAsyncRouter (asyncRouterMap, roles) {
   return accessedRouters
 }
 
-function generateRoutesMap (routes) {
-  const routesMap = {}
-  routes.forEach(node => {
-    const name = node.name
-    const route = {
-      [name]: node
+const permission = {
+  state: {
+    routers: constantRouterMap,
+    addRouters: []
+  },
+  mutations: {
+    SET_ROUTERS: (state, routers) => {
+      state.addRouters = routers
+      state.routers = constantRouterMap.concat(routers)
     }
-    Object.assign(routesMap, route)
-    if (node.children) {
-      Object.assign(routesMap, generateRoutesMap(node.children))
-    }
-  })
-  return routesMap
-}
-
-function plugin (constantRouterMap = [], asyncRouterMap = []) {
-  if (plugin.installed) {
-    return
-  }
-
-  const permission = {
-
-    state: {
-      routes: constantRouterMap,
-      addRoutes: [],
-      routesMap: {},
-      isRoutesFiltered: false
-    },
-
-    mutations: {
-      SET_ROUTERS: (state, routes) => {
-        state.addRoutes = routes
-        state.routes = constantRouterMap.concat(routes)
-        state.routesMap = generateRoutesMap(state.routes)
-      },
-      UPDATE_COUNT: (state, payload) => {
-        Object.keys(payload).forEach((routerName) => {
-          const value = payload[routerName]
-
-          state.routes.forEach((route) => {
-            if (!route.children) {
-              return
-            }
-            route.children.forEach((child) => {
-              if (child.name === routerName) {
-                child.meta = Object.assign({}, child.meta, {
-                  count: value
-                })
-              }
-            })
-          })
-        })
-      },
-      SET_FILTER_STATE: (state) => {
-        state.isRoutesFiltered = true
-      }
-    },
-
-    actions: {
-      UpdateCount ({ commit }, payload) {
-        commit('UPDATE_COUNT', payload)
-      },
-      GenerateRoutes ({ commit }, roles = []) {
-        return new Promise(resolve => {
-          let accessedRouters
-          if (roles.indexOf(DEFAULT_SUPER_ADMIN_ROLE) >= 0) {
-            accessedRouters = asyncRouterMap
-          } else {
-            accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
-          }
-          commit('SET_ROUTERS', accessedRouters)
-          commit('SET_FILTER_STATE')
-          resolve()
-        })
-      }
+  },
+  actions: {
+    GenerateRoutes({ commit }, data) {
+      return new Promise(resolve => {
+        const { roles } = data
+        let accessedRouters
+        if (roles.indexOf('admin') >= 0) {
+          accessedRouters = asyncRouterMap
+        } else {
+          accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
+        }
+        commit('SET_ROUTERS', accessedRouters)
+        resolve()
+      })
     }
   }
-
-  plugin.installed = true
-  return permission
 }
 
-export default plugin
+export default permission
