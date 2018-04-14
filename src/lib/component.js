@@ -1,6 +1,6 @@
 import * as components from '@/components'
 
-function install (Vue) {
+function install(Vue) {
   Object.keys(components).forEach((name) => {
     Vue.component(name, components[name])
   })
