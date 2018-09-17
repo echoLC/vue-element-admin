@@ -50,12 +50,12 @@ export const asyncRouterMap = [
     component: Layout,
     name: 'component-demo',
     meta: {
-      title: 'components',
+      title: '组件',
       icon: 'component'
     },
     children: [
       { path: 'tinymce', component: _import('components-demo/tinymce'), name: 'tinymce-demo', meta: { title: 'tinymce' }},
-      { path: 'back-to-top', component: _import('components-demo/backToTop'), name: 'backToTop-demo', meta: { title: 'backToTop' }}
+      { path: 'back-to-top', component: _import('components-demo/backToTop'), name: 'backToTop-demo', meta: { title: '置顶' }}
     ]
   },
   {
@@ -64,7 +64,7 @@ export const asyncRouterMap = [
     redirect: 'noredirect',
     name: 'charts',
     meta: {
-      title: 'charts',
+      title: '图表',
       icon: 'chart'
     },
     children: [
@@ -79,7 +79,7 @@ export const asyncRouterMap = [
     redirect: '/excel/export-excel',
     name: 'excel',
     meta: {
-      title: 'excel',
+      title: 'Excel',
       icon: 'excel'
     },
     children: [

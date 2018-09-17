@@ -4,30 +4,13 @@
 
     <breadcrumb class="breadcrumb-container"></breadcrumb>
 
-    <div class="right-menu">
-      <error-log class="errLog-container right-menu-item"></error-log>
+    <tags-view></tags-view>
 
-      <el-dropdown class="avatar-container right-menu-item" trigger="click">
-        <div class="avatar-wrapper">
-          <img class="user-avatar" :src="avatar+'?imageView2/1/w/80/h/80'">
-          <i class="el-icon-caret-bottom"></i>
-        </div>
-        <el-dropdown-menu slot="dropdown">
-          <router-link to="/">
-            <el-dropdown-item>
-              {{$t('navbar.dashboard')}}
-            </el-dropdown-item>
-          </router-link>
-          <a target='_blank' href="https://github.com/PanJiaChen/vue-element-admin/">
-            <el-dropdown-item>
-              {{$t('navbar.github')}}
-            </el-dropdown-item>
-          </a>
-          <el-dropdown-item divided>
-            <span @click="logout" style="display:block;">{{$t('navbar.logOut')}}</span>
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+    <div class="right-menu">
+      <span>欢迎您，{{ 'admin' }}</span>
+      <div @click="logout" class="logout">
+        | 退出登录
+      </div>
     </div>
   </el-menu>
 </template>
@@ -36,13 +19,13 @@
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
-import ErrorLog from '@/components/ErrorLog'
+import TagsView from './TagsView'
 
 export default {
   components: {
     Breadcrumb,
     Hamburger,
-    ErrorLog
+    TagsView
   },
   computed: {
     ...mapGetters([
@@ -52,10 +35,10 @@ export default {
     ])
   },
   methods: {
-    toggleSideBar() {
+    toggleSideBar () {
       this.$store.dispatch('toggleSideBar')
     },
-    logout() {
+    logout () {
       this.$store.dispatch('LogOut').then(() => {
         location.reload()// In order to re-instantiate the vue-router object to avoid bugs
       })
@@ -73,53 +56,24 @@ export default {
     line-height: 58px;
     height: 50px;
     float: left;
+    display: inline-block;
     padding: 0 10px;
   }
   .breadcrumb-container{
     float: left;
   }
-  .errLog-container {
-    display: inline-block;
-    vertical-align: top;
+  .tags-view-container {
+    float: left;
   }
   .right-menu {
     float: right;
     height: 100%;
-    &:focus{
-     outline: none;
-    }
-    .right-menu-item {
+    margin-right: 20px;
+    font-size: 14px;
+    .logout {
+      color: #97a8be;
+      cursor: pointer;
       display: inline-block;
-      margin: 0 8px;
-    }
-    .screenfull {
-      height: 20px;
-    }
-    .international{
-      vertical-align: top;
-    }
-    .theme-switch {
-      vertical-align: 15px;
-    }
-    .avatar-container {
-      height: 50px;
-      margin-right: 30px;
-      .avatar-wrapper {
-        cursor: pointer;
-        margin-top: 5px;
-        position: relative;
-        .user-avatar {
-          width: 40px;
-          height: 40px;
-          border-radius: 10px;
-        }
-        .el-icon-caret-bottom {
-          position: absolute;
-          right: -20px;
-          top: 25px;
-          font-size: 12px;
-        }
-      }
     }
   }
 }
