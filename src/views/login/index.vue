@@ -2,7 +2,7 @@
   <div class="login-container">
     <el-form class="login-form" autoComplete="on" :model="loginForm" :rules="loginRules" ref="loginForm" label-position="left">
       <div class="title-container">
-        <h3 class="title">{{$t('login.title')}}</h3>
+        <h3 class="title">系统登录</h3>
       </div>
       <el-form-item prop="username">
         <span class="svg-container svg-container_login">
@@ -15,13 +15,18 @@
         <span class="svg-container">
           <svg-icon icon-class="password" />
         </span>
-        <el-input name="password" :type="passwordType" @keyup.enter.native="handleLogin" v-model="loginForm.password" autoComplete="on" placeholder="password" />
+        <el-input name="password" :type="passwordType" v-model="loginForm.password" autoComplete="on" placeholder="password" />
         <span class="show-pwd" @click="showPwd">
           <svg-icon icon-class="eye" />
         </span>
       </el-form-item>
 
-      <el-button type="primary" style="width:100%;margin-bottom:30px;" :loading="loading" @click.native.prevent="handleLogin">{{$t('login.logIn')}}</el-button>
+      <!-- <el-form-item prop="code">
+        <el-input name="code" @keyup.enter.native="handleLogin" el-model="loginForm."></el-input>
+        <el-button>获取验证码</el-button>
+        </el-form-item>    -->
+
+      <el-button type="primary" style="width:100%;margin-bottom:30px;" :loading="loading" @click.native.prevent="handleLogin">登录</el-button>
     </el-form>
 
   </div>
@@ -29,6 +34,9 @@
 
 <script>
 import { isvalidUsername } from '@/utils/validate'
+import { getPublicKey, getVerifyCode, loginByUsername } from '@/api/login'
+import { setToken } from '@/utils/auth'
+const JSEncrypt = require('jsencrypt').JSEncrypt
 
 export default {
   name: 'login',
@@ -41,7 +49,7 @@ export default {
       }
     }
     const validatePassword = (rule, value, callback) => {
-      if (value.length < 6) {
+      if (value.length < 0) {
         callback(new Error('The password can not be less than 6 digits'))
       } else {
         callback()
@@ -49,11 +57,12 @@ export default {
     }
     return {
       loginForm: {
-        username: 'admin',
-        password: '1111111'
+        username: 'string',
+        password: '123',
+        veriCode: '1234'
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        username: [{ required: true, trigger: 'blur' }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
       passwordType: 'password',
@@ -73,18 +82,39 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('LoginByUsername', this.loginForm).then(() => {
+          const data = new FormData()
+          data.set('username', this.loginForm.username)
+          data.set('password', this.encryptPassword())
+          data.set('veriCode', '1234')
+          loginByUsername(data).then(() => {
             this.loading = false
+            setToken({ username: 'admin' })
             this.$router.push({ path: '/components/tinymce' })
-          }).catch(() => {
+          }).catch((err) => {
             this.loading = false
+            console.log(err)
           })
         } else {
           console.log('error submit!!')
           return false
         }
       })
+    },
+    encryptPassword () {
+      const encrypt = new JSEncrypt()
+      encrypt.setPublicKey(this.key)
+			return encrypt.encrypt(this.loginForm.password)
+    },
+    getPublicKey () {
+      getPublicKey().then((result) => {
+        this.key = result.data.data
+      }).catch((err) => {
+        console.log(err)
+      })
     }
+  },
+  created () {
+    this.getPublicKey()
   }
 }
 </script>

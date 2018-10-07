@@ -16,6 +16,9 @@ export default {
     return {
       content: 'tinymce'
     }
+  },
+  created () {
+    console.log(123)
   }
 }
 </script>

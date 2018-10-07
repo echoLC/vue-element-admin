@@ -1,29 +1,44 @@
 import request from '@/utils/request'
 
-export function loginByUsername (username, password) {
-  const data = {
-    username,
-    password
-  }
+export function loginByUsername (data) {
   return request({
-    url: '/login/login',
+    url: '/backend/login',
     method: 'post',
+    config: { headers: { 'Content-Type': 'multipart/form-data' }},
     data
   })
 }
 
 export function logout () {
   return request({
-    url: '/login/logout',
+    url: '/backend/logout',
     method: 'post'
   })
 }
 
-export function getUserInfo (token) {
+export function getUserInfo () {
+  return Promise.resolve({
+    data: {
+      name: 'admin',
+      roles: ['admin'],
+      avatar: '123',
+      intrduction: '酷酷酷'
+    }
+  })
+}
+
+export function getPublicKey () {
   return request({
-    url: '/user/info',
+    url: '/backend/um/user/getPublicKey',
+    method: 'get'
+  })
+}
+
+export function getVerifyCode () {
+  return request({
+    url: '/backend/um/user/getImage',
     method: 'get',
-    params: { token }
+    responseType: 'blob'
   })
 }
 

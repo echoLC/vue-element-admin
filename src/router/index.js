@@ -41,11 +41,6 @@ export default new Router({
 
 export const asyncRouterMap = [
   {
-    path: '',
-    redirect: 'components/tinymce',
-    hidden: true
-  },
-  {
     path: '/components',
     component: Layout,
     name: 'component-demo',

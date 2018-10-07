@@ -7,7 +7,7 @@ const errorHandler = commit => (err) => {  // eslint-disable-line
 }
 
 const actions = {
-  updateLoading ({commit}, isLoading) {
+  updateLoading ({ commit }, isLoading) {
     commit(types.UPDATE_LOADING, isLoading)
   }
 }
