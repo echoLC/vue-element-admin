@@ -25,10 +25,9 @@
         <el-input name="code" @keyup.enter.native="handleLogin" el-model="loginForm."></el-input>
         <el-button>获取验证码</el-button>
         </el-form-item>    -->
-
       <el-button type="primary" style="width:100%;margin-bottom:30px;" :loading="loading" @click.native.prevent="handleLogin">登录</el-button>
     </el-form>
-
+   <img :src="veriCode" alt="">
   </div>
 </template>
 
@@ -67,18 +66,19 @@ export default {
       },
       passwordType: 'password',
       loading: false,
-      showDialog: false
+      showDialog: false,
+      veriCode: ''
     }
   },
   methods: {
-    showPwd() {
+    showPwd () {
       if (this.passwordType === 'password') {
         this.passwordType = ''
       } else {
         this.passwordType = 'password'
       }
     },
-    handleLogin() {
+    handleLogin () {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
@@ -111,10 +111,24 @@ export default {
       }).catch((err) => {
         console.log(err)
       })
+    },
+    getVerifyCode () {
+      getVerifyCode().then((result) => {
+        console.log(result.blob())
+        const buffer = new Buffer(result.data, 'binary')
+        const blob = new Blob(buffer, { type: 'image/png'})
+        var reader = new FileReader()
+        reader.readAsDataURL(blob)
+        reader.onloadend = function() {
+        this.veriCode = reader.result 
+        console.log(this.veriCode)              
+        }
+      })
     }
   },
   created () {
     this.getPublicKey()
+    this.getVerifyCode()
   }
 }
 </script>

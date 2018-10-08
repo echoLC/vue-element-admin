@@ -38,7 +38,7 @@ export function getVerifyCode () {
   return request({
     url: '/backend/um/user/getImage',
     method: 'get',
-    responseType: 'blob'
+    responseType: 'arraybuffer'
   })
 }
 
