@@ -4,7 +4,6 @@
     :value="parsedValue"
     @input="handleDatePicked"
     align="center"
-    :picker-options="pickerOptions"
     :type="type"
     range-separator="至"
     start-placeholder="开始日期"
@@ -14,14 +13,6 @@
 </template>
 
 <script>
-import { dateRange } from '@/utils/date'
-
-function handlePickerClick (type, prevNum) {
-  return function pick (picker) {
-    const arr = type !== null ? dateRange(type, prevNum) : [null, null]
-    picker.$emit('pick', arr)
-  }
-}
 
 export default {
   name: 'HyDateRangePicker',
@@ -31,10 +22,6 @@ export default {
       default: () => {
         return ''
       }
-    },
-    quickOption: {
-      type: Boolean,
-      default: false
     },
     placeholder: {
       type: String,
@@ -53,36 +40,6 @@ export default {
       }
       const { beginDate, endDate } = this.value
       return [beginDate, endDate]
-    },
-    pickerOptions () {
-      if (!this.quickOption) {
-        return null
-      }
-
-      return {
-        shortcuts: [{
-          text: '全部',
-          onClick: handlePickerClick(null)
-        }, {
-          text: '今天',
-          onClick: handlePickerClick('day')
-        }, {
-          text: '昨天',
-          onClick: handlePickerClick('day', 1)
-        }, {
-          text: '本周',
-          onClick: handlePickerClick('week')
-        }, {
-          text: '上周',
-          onClick: handlePickerClick('week', 1)
-        }, {
-          text: '本月',
-          onClick: handlePickerClick('month')
-        }, {
-          text: '上月',
-          onClick: handlePickerClick('month', 1)
-        }]
-      }
     }
   },
   methods: {

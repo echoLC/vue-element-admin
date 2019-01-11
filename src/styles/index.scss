@@ -98,12 +98,10 @@ div:focus{
 
 code {
   background: #eef1f6;
-  padding: 15px 16px;
+  padding: 15px 10px;
   margin-bottom: 20px;
   display: block;
   line-height: 36px;
-  font-size: 15px;
-  font-family: "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
   a {
     color: #337ab7;
     cursor: pointer;
@@ -138,6 +136,10 @@ code {
 
 .pagination-container {
   margin-top: 30px;
+}
+
+.editor-container .CodeMirror {
+  height: 100%!important;
 }
 
 .text-center {
